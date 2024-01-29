@@ -1,10 +1,8 @@
 const mongoose = require('mongoose');
 
 const characterSchema = new mongoose.Schema({
-  name: {
-    type: String,
-    required: true,
-  },
+  id: Number,
+  name: String,
   status: String,
   species: String,
   type: String,
@@ -22,10 +20,7 @@ const characterSchema = new mongoose.Schema({
     type: String,
   }],
   url: String,
-  created: {
-    type: Date,
-    default: Date.now,
-  },
+  created: String
 });
 
 const Character = mongoose.model('Character', characterSchema);
