@@ -1,23 +1,15 @@
 const mongoose = require('mongoose');
 
 const episodeSchema = new mongoose.Schema({
-  name: {
-    type: String,
-    required: true,
-  },
+  id: Number,
+  name: String,
   air_date: String,
-  episode: {
-    type: String,
-    required: true,
-  },
+  episode: String,
   characters: [{
     type: String,
   }],
   url: String,
-  created: {
-    type: Date,
-    default: Date.now,
-  },
+  created: String,
 });
 
 const Episode = mongoose.model('Episode', episodeSchema);
