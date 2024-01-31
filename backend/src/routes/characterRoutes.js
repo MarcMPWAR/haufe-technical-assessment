@@ -4,33 +4,46 @@ const Character = require('../models/Character');
 
 const router = express.Router();
 
-// Fetch and save characters from the Rick and Morty API
-router.get('/characters', async (req, res) => {
+// Function to fetch and update characters from the external API
+const updateCharactersFromAPI = async () => {
   try {
-    // Fetch characters from the external API
     const response = await axios.get('https://rickandmortyapi.com/api/character');
     const apiCharacters = response.data.results;
 
     const updatedCharacters = [];
 
-    // Loop through characters from the API and update or insert each one
     for (const apiCharacter of apiCharacters) {
       const existingCharacter = await Character.findOne({ id: apiCharacter.id });
 
       if (existingCharacter) {
-        // Update existing character in the database
         await Character.updateOne({ id: apiCharacter.id }, apiCharacter);
         updatedCharacters.push(apiCharacter);
       } else {
-        // Insert new character into the database
         const newCharacter = await Character.create(apiCharacter);
         updatedCharacters.push(newCharacter);
       }
     }
 
-    res.json({ message: 'Characters updated/inserted successfully.', updatedCharacters });
+    console.log('Characters updated/inserted successfully.');
   } catch (error) {
     console.error('Error fetching/updating characters:', error.message);
+  }
+};
+
+// Route to trigger manual update of characters
+router.get('/update-characters', async (req, res) => {
+  await updateCharactersFromAPI();
+  res.json({ message: 'Characters updated/inserted successfully.' });
+});
+
+
+// Fetch and save characters from the Rick and Morty API
+router.get('/characters', async (req, res) => {
+  try {
+    const characters = await Character.find();
+    res.json({ characters });
+  } catch (error) {
+    console.error('Error fetching characters from the database:', error.message);
     res.status(500).json({ error: 'Internal Server Error' });
   }
 });
@@ -80,4 +93,4 @@ router.get('/characters/filter', async (req, res) => {
 
 
 
-module.exports = router;
+module.exports = { router, updateCharactersFromAPI };

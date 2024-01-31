@@ -30,11 +30,7 @@ const passportConfig = () => {
   passport.use(
     new LocalStrategy(async (email, password, done) => {
       try {
-        console.log("email: ", email);
-        console.log("password: ", password);
-
         const user = await User.findOne({ email: email });
-        console.log("user: ", user);
 
         if (!user || !user.comparePassword(password)) {
           return done(null, false, { message: 'Incorrect username or password' });
