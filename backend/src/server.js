@@ -1,7 +1,8 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const cors = require('cors');
 const connectDB = require('./services/db');
-const characterRoutes = require('./routes/characterRoutes');
+const { router: characterRoutes, updateCharactersFromAPI } = require('./routes/characterRoutes');
 const episodeRoutes = require('./routes/episodeRoutes');
 const locationRoutes = require('./routes/locationRoutes');
 const authRoutes = require('./routes/authRoutes');
@@ -11,9 +12,10 @@ require('dotenv').config();
 const app = express();
 const PORT = process.env.PORT || 3001;
 
+app.use(cors()); // Enable CORS for all routes
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
+//app.use(bodyParser.json());
 connectDB();
 
 // Initialize Passport.js
@@ -26,6 +28,9 @@ app.use('/api/auth', authRoutes);
 app.use('/api', characterRoutes);
 app.use('/api', episodeRoutes);
 app.use('/api', locationRoutes);
+
+// Initialize characters when the application starts
+updateCharactersFromAPI();
 
 app.use((err, req, res, next) => {
   console.error(err.stack);

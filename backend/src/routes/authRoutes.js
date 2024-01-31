@@ -32,16 +32,12 @@ authRouter.post('/register', async (req, res) => {
 // Login route
 authRouter.post('/login', async (req, res, next) => {
   try {
-    console.log("Login request received:", req.body); // Log the request body
 
     const { email, password } = req.body;
-    console.log("email: ", email);
-    console.log("password: ", password);
 
     req.body = { username: email, password }; 
 
     passport.authenticate('local', { session: false }, (err, user, info) => {
-      console.log("Passport authentication result:", err, user, info); // Log passport results
 
       if (err) {
         return next(err);
