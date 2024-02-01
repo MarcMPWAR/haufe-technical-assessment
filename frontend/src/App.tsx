@@ -9,6 +9,7 @@ import { useAuth } from './contexts/AuthContext';
 import LandingPage from './pages/LandingPage';
 import AuthService from './services/AuthService';
 import ProtectedRoute from './components/ProtectedRoute';
+import NotFound from './components/NotFound';
 
 const App: React.FC = () => {
   const { characters, loading, error } = useCharacters();
@@ -50,6 +51,7 @@ const App: React.FC = () => {
         path="/character/:id"
         element={<ProtectedRoute element={<CharacterDetails />} />}
       />
+      <Route path="*" element={<NotFound />} />
     </Routes>
     </div>
   </Router>
