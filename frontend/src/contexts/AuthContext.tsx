@@ -7,6 +7,8 @@ interface AuthContextType {
   isLoading: boolean;
   login: (email: string, password: string) => Promise<{ success: boolean; message: string }>;
   getUserData: () => Promise<void>;
+  logout: () => void;
+  register: (email: string, password: string) => Promise<{ success: boolean; message: string }>;
 }
 
 interface AuthContextProps {
@@ -18,6 +20,9 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export const AuthProvider: React.FC<AuthContextProps> = ({ children }) => {
   const [isAuthenticated, setAuthenticated] = useState(false);
   const [isLoading, setLoading] = useState(true);
+  const [isRegistrated, setRegistrationSuccess] = useState(false);
+  const [registrationMessage, setRegistrationMessage] = useState("");
+  
 
   const login = async (email: string, password: string): Promise<{ success: boolean; message: string }> => {
     try {
@@ -36,6 +41,32 @@ export const AuthProvider: React.FC<AuthContextProps> = ({ children }) => {
       return { success: false, message: 'Internal error during login' };
     }
   };
+
+  const logout = () => {
+    setAuthenticated(false);
+    AuthService.logout();
+  };
+
+  const register = async (email: string, password: string): Promise<{ success: boolean; message: string }> => {
+  try {
+    const { success, message } = await AuthService.register(email, password);
+
+    if (success) {
+      // You may set a state to show a success message and provide a button for manual login
+      setRegistrationSuccess(true);
+      setRegistrationMessage('Registration successful. Click the button below to login.');
+    } else {
+      // Handle failed registration
+      console.error('Registration failed:', message);
+    }
+    return { success, message };
+  } catch (error) {
+    // Handle any errors from AuthService
+    console.error('Error during registration:', error);
+    return { success: false, message: 'Internal error during registration' };
+  }
+};
+
 
   const getUserData = async () => {
     try {
@@ -69,7 +100,7 @@ export const AuthProvider: React.FC<AuthContextProps> = ({ children }) => {
   }, []);
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, isLoading, login, getUserData }}>
+    <AuthContext.Provider value={{ isAuthenticated, isLoading, login, getUserData, logout, register }}>
       {children}
     </AuthContext.Provider>
   );

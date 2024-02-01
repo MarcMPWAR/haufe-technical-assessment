@@ -2,6 +2,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Character } from '../interfaces/iCharacter';
+import { useAuth } from '../contexts/AuthContext';
 
 interface CharactersProps {
   characters: Character[];
@@ -10,6 +11,8 @@ interface CharactersProps {
 }
 
 const Characters: React.FC<CharactersProps> = ({ characters, loading, error }) => {
+  const { logout } = useAuth();
+
   if (loading) {
     return <div>Loading...</div>;
   }
@@ -26,6 +29,7 @@ const Characters: React.FC<CharactersProps> = ({ characters, loading, error }) =
   return (
     <div>
       <h2>Characters</h2>
+      <button onClick={logout}>Logout</button>
       <ul>
         {characters.map((character) => (
           <li key={character.id}>
