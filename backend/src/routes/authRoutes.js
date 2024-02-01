@@ -59,6 +59,17 @@ authRouter.post('/login', async (req, res, next) => {
   }
 });
 
+authRouter.get('/user', passport.authenticate('jwt', { session: false }), (req, res) => {
+  try {
+    // The user object is available in req.user after successful JWT verification
+    const { id, email } = req.user;
+    res.json({ id, email });
+  } catch (error) {
+    console.error('Error fetching user data:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
 
 
 // Function to generate a JWT
