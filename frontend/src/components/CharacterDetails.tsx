@@ -1,10 +1,12 @@
 import React, { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import useCharacterDetails from '../hooks/useCharacterDetails';
+import { useAuth } from '../contexts/AuthContext';
 
 const CharacterDetails: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const { characterDetails, loading, error } = useCharacterDetails(Number(id));
+  const { logout } = useAuth();
 
   if (loading) {
     return <p>Loading...</p>;
@@ -20,6 +22,7 @@ const CharacterDetails: React.FC = () => {
 
   return (
     <div>
+      <button onClick={logout}>Logout</button>
       <h2>{characterDetails?.name}</h2>
       <p>Status: {characterDetails?.status}</p>
       <p>Species: {characterDetails?.species}</p>

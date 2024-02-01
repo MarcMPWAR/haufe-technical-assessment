@@ -27,10 +27,23 @@
 }
 
 .auth-form button {
-  background-color: #ffcc00; /* Yellowish button color */
+  background-color: #ffcc00;
   color: #000;
   padding: 10px;
   border: none;
   border-radius: 5px;
   cursor: pointer;
+}
+
+.auth-form button:last-child {
+  margin-left: 10px;
+}
+
+.error-message {
+  color: #ff0000;
+  margin-bottom: 15px;
+}
+
+.success-message {
+  margin-bottom: 15px;
 }
