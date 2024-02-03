@@ -20,7 +20,8 @@ const characterSchema = new mongoose.Schema({
     type: String,
   }],
   url: String,
-  created: String
+  created: String,
+  isFavorite: { type: Boolean, default: false },
 });
 
 const Character = mongoose.model('Character', characterSchema);

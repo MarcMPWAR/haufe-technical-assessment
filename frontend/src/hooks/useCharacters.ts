@@ -1,9 +1,7 @@
 // src/hooks/useCharacters.ts
 
 import { useReducer, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import { fetchCharacters, fetchCharactersRequest, fetchCharactersSuccess, fetchCharactersFailure } from '../actions/characterActions';
-import { RootState } from '../store/store';
 import { Character } from '../interfaces/iCharacter';
 
 interface CharactersState {
@@ -33,22 +31,22 @@ const reducer = (state: CharactersState, action: any) => {
 
 const useCharacters = () => {
   const [state, dispatch] = useReducer(reducer, initialState);
-  const characters = useSelector((state: RootState) => state.characters.characters);
+
+  const fetchCharactersData = async () => {
+    try {
+      dispatch(fetchCharactersRequest());
+      await (fetchCharacters as any)(dispatch);
+    } catch (error) {
+      dispatch(fetchCharactersFailure(error));
+    }
+  };
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        dispatch(fetchCharactersRequest());
-        await (fetchCharacters as any)(dispatch);
-      } catch (error) {
-        dispatch(fetchCharactersFailure(error));
-      }
-    };
-
-    fetchData();
+    fetchCharactersData();
   }, []);
 
-  return { characters: state.characters, loading: state.loading, error: state.error };
+  return { characters: state.characters, loading: state.loading, error: state.error, refetch: fetchCharactersData };
 };
+
 
 export default useCharacters;

@@ -12,7 +12,7 @@ import ProtectedRoute from './components/ProtectedRoute';
 import NotFound from './components/NotFound';
 
 const App: React.FC = () => {
-  const { characters, loading, error } = useCharacters();
+  const { loading, error } = useCharacters();
   const { isAuthenticated } = useAuth();
   const [initialLoading, setInitialLoading] = useState(true);
 
@@ -39,13 +39,13 @@ const App: React.FC = () => {
   
 
   return (
-    <Router>
+  <Router>
     <div className="App">
     <Routes>
       <Route path="/" element={isAuthenticated ? <Navigate to="/characters" /> : <LandingPage />} />
       <Route
         path="/characters"
-        element={<ProtectedRoute element={<Characters characters={characters} loading={loading} error={error} />} />}
+        element={<ProtectedRoute element={<Characters loading={loading} error={error} />} />}
       />
       <Route
         path="/character/:id"

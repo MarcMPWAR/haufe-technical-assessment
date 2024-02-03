@@ -15,6 +15,10 @@ const updateCharactersFromAPI = async () => {
     for (const apiCharacter of apiCharacters) {
       const existingCharacter = await Character.findOne({ id: apiCharacter.id });
 
+      if (!apiCharacter.isFavorite) {
+        apiCharacter.isFavorite = false;
+      }
+
       if (existingCharacter) {
         await Character.updateOne({ id: apiCharacter.id }, apiCharacter);
         updatedCharacters.push(apiCharacter);
@@ -63,6 +67,30 @@ router.get('/character/:id', async (req, res) => {
     res.json(characters);
   } catch (error) {
     console.error('Error fetching character details:', error.message);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+router.post('/character/:id/favorite', async (req, res) => {
+  const characterId = parseInt(req.params.id.trim());
+
+  try {
+    // Find the character in the database by ID
+    const character = await Character.findOne({ id: characterId });
+
+    if (!character) {
+      return res.status(404).json({ error: 'Character not found' });
+    }
+
+    // Toggle the isFavorite field
+    character.isFavorite = !character.isFavorite;
+
+    // Save the updated character
+    await character.save();
+
+    res.json({ character, message: `Character ${character.name} marked as ${character.isFavorite ? 'favorite' : 'not favorite'}` });
+  } catch (error) {
+    console.error('Error marking character as a favorite:', error.message);
     res.status(500).json({ error: 'Internal Server Error' });
   }
 });
