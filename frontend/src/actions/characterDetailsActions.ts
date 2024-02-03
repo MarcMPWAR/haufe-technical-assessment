@@ -1,6 +1,8 @@
 import axios from 'axios';
 import { Dispatch } from 'redux';
 import { CharacterDetails } from '../interfaces/iCharacterDetails';
+const { REACT_APP_API_PROTOCOL, REACT_APP_API_HOST, REACT_APP_API_PORT } = process.env;
+
 
 // Action Types
 export const FETCH_CHARACTER_DETAILS_REQUEST = 'FETCH_CHARACTER_DETAILS_REQUEST';
@@ -30,7 +32,7 @@ export const fetchCharacterDetails = async (dispatch: Dispatch, id: number) => {
   dispatch(fetchCharacterDetailsRequest());
 
   try {
-    const response = await axios.get(`http://localhost:3001/api/character/${id}`);
+    const response = await axios.get(`${REACT_APP_API_PROTOCOL}://${REACT_APP_API_HOST}:${REACT_APP_API_PORT}/api/character/${id}`);
     const transformedData: CharacterDetails = transformCharacterDetails(response.data[0]);
     dispatch(fetchCharacterDetailsSuccess(transformedData));
 
@@ -61,7 +63,7 @@ export const toggleFavoriteFailure = (error: unknown) => ({
 export const toggleFavorite = async (dispatch: Dispatch, id: number) => {
   dispatch(toggleFavoriteRequest());
   try {
-    const response = await axios.post(`http://localhost:3001/api/character/${id}/favorite`);
+    const response = await axios.post(`${REACT_APP_API_PROTOCOL}://${REACT_APP_API_HOST}:${REACT_APP_API_PORT}/api/character/${id}/favorite`);
     const { isFavorite } = response.data;
     
     const transformedData: CharacterDetails = transformCharacterDetails(response.data.character);

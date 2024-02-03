@@ -7,10 +7,12 @@ const { router: episodeRoutes, updateEpisodesFromAPI } = require('./routes/episo
 const locationRoutes = require('./routes/locationRoutes');
 const authRoutes = require('./routes/authRoutes');
 const passportConfig = require('./config/passport-config');
-require('dotenv').config();
+
+//Configure environment variables
+require('dotenv').config({ path: `${__dirname}/../.env` })
 
 const app = express();
-const PORT = process.env.PORT || 3001;
+const PORT = process.env.PORT;
 
 app.use(cors()); // Enable CORS for all routes
 app.use(express.json());
@@ -36,11 +38,6 @@ updateEpisodesFromAPI();
 app.use((err, req, res, next) => {
   console.error(err.stack);
   res.status(500).json({ error: 'Internal Server Error' });
-});
-
-// Default route
-app.get('/', (req, res) => {
-  res.send('Hello, this is your Express server!');
 });
 
 // Start the server
