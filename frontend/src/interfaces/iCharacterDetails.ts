@@ -28,4 +28,5 @@ export interface CharacterDetails {
   episode: Episode[];
   url: string;
   created: string;
+  isFavorite: boolean;
 }

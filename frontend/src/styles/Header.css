@@ -1,0 +1,36 @@
+.header-title {
+  font-family: 'Roboto', sans-serif;
+  font-size: 44px;
+}
+
+.header {
+  padding: 10px;
+}
+
+.header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.header-buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.logout-button,
+.back-button {
+  font-family: 'Roboto', sans-serif;
+  background-color: #ffcc00;
+  color: #000;
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.logout-button:hover,
+.back-button:hover {
+  background-color: #e6b800;
+}

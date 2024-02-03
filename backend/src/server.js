@@ -3,7 +3,7 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const connectDB = require('./services/db');
 const { router: characterRoutes, updateCharactersFromAPI } = require('./routes/characterRoutes');
-const episodeRoutes = require('./routes/episodeRoutes');
+const { router: episodeRoutes, updateEpisodesFromAPI } = require('./routes/episodeRoutes');
 const locationRoutes = require('./routes/locationRoutes');
 const authRoutes = require('./routes/authRoutes');
 const passportConfig = require('./config/passport-config');
@@ -29,8 +29,9 @@ app.use('/api', characterRoutes);
 app.use('/api', episodeRoutes);
 app.use('/api', locationRoutes);
 
-// Initialize characters when the application starts
+// Initialize characters and episodes when the application starts
 updateCharactersFromAPI();
+updateEpisodesFromAPI();
 
 app.use((err, req, res, next) => {
   console.error(err.stack);

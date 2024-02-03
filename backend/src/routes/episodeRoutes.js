@@ -1,12 +1,10 @@
 const express = require('express');
 const axios = require('axios');
 const Episode = require('../models/Episode');
-const Location = require('../models/Location');
 
 const router = express.Router();
 
-// Fetch and save episodes from the Rick and Morty API
-router.get('/episodes', async (req, res) => {
+const updateEpisodesFromAPI = async () => {
   try {
     // Fetch episodes from the external API
     const response = await axios.get('https://rickandmortyapi.com/api/episode');
@@ -29,12 +27,28 @@ router.get('/episodes', async (req, res) => {
       }
     }
 
-    res.json({ message: 'Episodes updated/inserted successfully.', updatedEpisodes });
+    console.log('Episodes updated/inserted successfully.');
   } catch (error) {
     console.error('Error fetching/updating episodes:', error.message);
+  }
+};
+
+router.get('/update-episodes', async (req, res) => {
+  await updateEpisodesFromAPI();
+  res.json({ message: 'Episodes updated/inserted successfully.' });
+});
+
+// Endpoint to get all episodes from the database
+router.get('/episodes', async (req, res) => {
+  try {
+    const episodes = await Episode.find();
+    res.json({ episodes });
+  } catch (error) {
+    console.error('Error fetching episodes from the database:', error.message);
     res.status(500).json({ error: 'Internal Server Error' });
   }
 });
+
 
 // Fetch episodes by IDs
 router.get('/episode/:id', async (req, res) => {
@@ -61,7 +75,7 @@ router.get('/episodes/filter', async (req, res) => {
   try {
     // Apply filters if provided in query parameters
     let queryFilters = {};
-    const filters = ['name', 'episode', 'type', 'dimension'];
+    const filters = ['name', 'episode'];
 
     filters.forEach((filter) => {
       if (req.query[filter]) {
@@ -80,4 +94,4 @@ router.get('/episodes/filter', async (req, res) => {
   }
 });
 
-module.exports = router;
+module.exports = { router, updateEpisodesFromAPI };

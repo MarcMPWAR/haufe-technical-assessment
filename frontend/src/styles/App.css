@@ -1,4 +1,8 @@
-.App {
+body {
+  font-family: 'Roboto', sans-serif;
+}
+
+.App h2 {
   text-align: center;
 }
 
