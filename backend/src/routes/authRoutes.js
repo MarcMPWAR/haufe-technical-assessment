@@ -61,7 +61,6 @@ authRouter.post('/login', async (req, res, next) => {
 
 authRouter.get('/user', passport.authenticate('jwt', { session: false }), (req, res) => {
   try {
-    // The user object is available in req.user after successful JWT verification
     const { id, email } = req.user;
     res.json({ id, email });
   } catch (error) {
@@ -71,19 +70,20 @@ authRouter.get('/user', passport.authenticate('jwt', { session: false }), (req, 
 });
 
 
-
-// Function to generate a JWT
 function generateToken(user) {
   const payload = {
     id: user.id,
-    email: user.email, // Add other user information if needed
+    email: user.email,
   };
 
   const options = {
-    expiresIn: '1h', // Set the expiration time as needed
+    expiresIn: '1h',
   };
 
-  return jwt.sign(payload, "51d5cb5a9f2f237f5c8d2c1f7d68e2887d7d9f4d1dd5bc7e24f7e75d697f6872", options);
+  const jwtSecret = process.env.JWT_SECRET || 'your_default_secret_key';
+
+
+  return jwt.sign(payload, jwtSecret, options);
 }
 
 module.exports = authRouter;

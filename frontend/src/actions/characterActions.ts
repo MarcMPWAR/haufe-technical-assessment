@@ -1,6 +1,8 @@
 import axios from 'axios';
 import { Dispatch } from 'redux';
 import { Character } from '../interfaces/iCharacter';
+const { REACT_APP_API_PROTOCOL, REACT_APP_API_HOST, REACT_APP_API_PORT } = process.env;
+
 
 // Action Types
 export const FETCH_CHARACTERS_REQUEST = 'FETCH_CHARACTERS_REQUEST';
@@ -26,7 +28,7 @@ export const fetchCharacters = async (dispatch: Dispatch) => {
   dispatch(fetchCharactersRequest());
 
   try {
-    const response = await axios.get('http://localhost:3001/api/characters');
+    const response = await axios.get(`${REACT_APP_API_PROTOCOL}://${REACT_APP_API_HOST}:${REACT_APP_API_PORT}/api/characters`);
     dispatch(fetchCharactersSuccess(response.data.characters));
   } catch (error) {
     dispatch(fetchCharactersFailure(error));

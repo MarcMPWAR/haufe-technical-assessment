@@ -8,7 +8,7 @@ dotenv.config();
 
 const options = {
   jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-  secretOrKey: "51d5cb5a9f2f237f5c8d2c1f7d68e2887d7d9f4d1dd5bc7e24f7e75d697f6872",
+  secretOrKey: process.env.JWT_SECRET || 'your_default_secret_key',
 };
 
 const passportConfig = () => {
